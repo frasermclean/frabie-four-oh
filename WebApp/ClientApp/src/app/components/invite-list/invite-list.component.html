@@ -1,1 +1,6 @@
-<p>invite-list works!</p>
+<ng-container *ngIf="invites$ | async as invites">
+  <p *ngFor="let invite of invites">
+    {{ invite.name }}
+  </p>
+</ng-container>
+

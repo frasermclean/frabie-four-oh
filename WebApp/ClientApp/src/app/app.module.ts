@@ -1,12 +1,15 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HttpClientModule } from '@angular/common/http';
 
 // angular material
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTableModule } from '@angular/material/table';
 
 import { AppRoutingModule } from './app-routing.module';
+
+// application components
 import { AppComponent } from './app.component';
 import { InviteListComponent } from './components/invite-list/invite-list.component';
 import { HeaderComponent } from './components/header/header.component';
@@ -26,6 +29,7 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     MatToolbarModule,
