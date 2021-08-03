@@ -33,5 +33,12 @@ namespace WebApp.Controllers
 
             return Ok(invite);
         }
+
+        [HttpDelete]
+        [Route("{id}")]
+        public ActionResult DeleteInvite(int id)
+        {
+            return NoContent();
+        }
     }
 }
