@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.Azure.Cosmos;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using WebApp.Models;
 
@@ -13,47 +15,53 @@ namespace WebApp.Services
 
     public class InviteRepository : IInviteRepository
     {
-        public Task<IEnumerable<Invite>> GetInvitesAsync()
-        {
-            IEnumerable<Invite> list = new List<Invite>()
-            {
-                new Invite()
-                {
-                    Id = 1,
-                    Name = "Fraser McLean",
-                    Email = "contact@frasermclean.com",
-                    InviteStatus = InviteStatus.Attending,
-                },
-                new Invite()
-                {
-                    Id = 2,
-                    Name = "Louise Young",
-                    Email = "louiseyoung@frasermclean.com",
-                    InviteStatus = InviteStatus.WaitingForResponse,
-                }
-            };
+        private readonly IDatabaseService databaseService;
 
-            return Task.FromResult(list);
+        public InviteRepository(IDatabaseService databaseService)
+        {
+            this.databaseService = databaseService;
+        }
+
+        public async Task<IEnumerable<Invite>> GetInvitesAsync()
+        {
+            Container container = await GetContainerAsync();
+
+            List<Invite> list = new();
+            using FeedIterator<Invite> resultSet = container.GetItemQueryIterator<Invite>(queryDefinition: null);
+
+            while(resultSet.HasMoreResults)
+            {
+                FeedResponse<Invite> response = await resultSet.ReadNextAsync();
+                list.AddRange(response);
+            }
+
+            return list;
         }
 
         public async Task<Invite> CreateInviteAsync(string name, string email)
         {
-            List<Invite> list = new(await GetInvitesAsync());
-
-            Invite invite = new()
+            Container container = await GetContainerAsync();
+            return await container.CreateItemAsync(new Invite()
             {
-                Id = list.Count + 1,
                 Name = name,
                 Email = email,
-                InviteStatus = InviteStatus.WaitingForResponse,
-            };
-
-            return invite;
+            });
         }
 
         public Task<bool> DeleteInviteAsync(int id)
         {
             return Task.FromResult(false);
         }
+
+
+        #region Private methods
+
+        private async Task<Container> GetContainerAsync()
+        {
+            Database database = await databaseService.GetDatabaseAsync();
+            return await database.CreateContainerIfNotExistsAsync("Invites", "/partition");
+        }
+
+        #endregion
     }
 }

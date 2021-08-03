@@ -20,6 +20,7 @@ namespace FrabieFourOh.WebApp
         public void ConfigureServices(IServiceCollection services)
         {
             // add application services
+            services.AddSingleton<IDatabaseService, DatabaseService>();
             services.AddSingleton<IInviteRepository, InviteRepository>();
             
             services.AddControllers();
