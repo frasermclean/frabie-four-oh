@@ -4,6 +4,8 @@ namespace WebApp.Models
 {
     public class Invite
     {
+        public int Id { get; set; }
+
         [Required]
         public string Name { get; set; }
 
