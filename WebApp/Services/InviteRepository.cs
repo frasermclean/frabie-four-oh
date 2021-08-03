@@ -8,8 +8,8 @@ namespace WebApp.Services
 {
     public interface IInviteRepository
     {
-        Task<IEnumerable<Invite>> GetInvitesAsync();
-        Task<Invite> CreateInviteAsync(string name, string email);
+        Task<IEnumerable<InviteEntity>> GetInvitesAsync();
+        Task<InviteEntity> CreateInviteAsync(string name, string email);
         Task DeleteInviteAsync(string id);
     }
 
@@ -22,26 +22,26 @@ namespace WebApp.Services
             this.databaseService = databaseService;
         }
 
-        public async Task<IEnumerable<Invite>> GetInvitesAsync()
+        public async Task<IEnumerable<InviteEntity>> GetInvitesAsync()
         {
             Container container = await GetContainerAsync();
 
-            List<Invite> list = new();
-            using FeedIterator<Invite> resultSet = container.GetItemQueryIterator<Invite>(queryDefinition: null);
+            List<InviteEntity> list = new();
+            using FeedIterator<InviteEntity> resultSet = container.GetItemQueryIterator<InviteEntity>(queryDefinition: null);
 
             while(resultSet.HasMoreResults)
             {
-                FeedResponse<Invite> response = await resultSet.ReadNextAsync();
+                FeedResponse<InviteEntity> response = await resultSet.ReadNextAsync();
                 list.AddRange(response);
             }
 
             return list;
         }
 
-        public async Task<Invite> CreateInviteAsync(string name, string email)
+        public async Task<InviteEntity> CreateInviteAsync(string name, string email)
         {
             Container container = await GetContainerAsync();
-            return await container.CreateItemAsync(new Invite()
+            return await container.CreateItemAsync(new InviteEntity()
             {
                 Name = name,
                 Email = email,
@@ -51,7 +51,7 @@ namespace WebApp.Services
         public async Task DeleteInviteAsync(string id)
         {
             Container container = await GetContainerAsync();
-            await container.DeleteItemAsync<Invite>(id, PartitionKey.Null);
+            await container.DeleteItemAsync<InviteEntity>(id, PartitionKey.Null);
         }
 
 

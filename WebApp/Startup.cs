@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using WebApp.Models;
 using WebApp.Services;
 
 namespace FrabieFourOh.WebApp
@@ -16,20 +17,26 @@ namespace FrabieFourOh.WebApp
         {
             Configuration = configuration;
         }
-        
+
         public void ConfigureServices(IServiceCollection services)
         {
+            // add auto mapper with configuration
+            services.AddAutoMapper(config =>
+            {
+                config.CreateMap<InviteEntity, InviteDto>();
+            });
+
             // add application services
             services.AddSingleton<IDatabaseService, DatabaseService>();
             services.AddSingleton<IInviteRepository, InviteRepository>();
-            
+
             services.AddControllers();
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "ClientApp/dist";
             });
         }
-        
+
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())

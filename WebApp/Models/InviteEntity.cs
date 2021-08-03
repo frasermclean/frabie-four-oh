@@ -2,7 +2,7 @@
 
 namespace WebApp.Models
 {
-    public class Invite : Entity
+    public class InviteEntity : Entity
     {
         public string Name { get; set; }
         public string Email { get; set; }
