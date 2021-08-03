@@ -1,44 +1,42 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using WebApp.Models;
+using WebApp.Services;
 
 namespace WebApp.Controllers
 {
     public class InviteController : WebApiController
     {
-        [HttpGet]
-        public ActionResult<IEnumerable<Invite>> GetInviteList()
-        {
-            List<Invite> list = new()
-            {
-                new Invite()
-                {
-                    Name = "Fraser McLean",
-                    Email = "contact@frasermclean.com",
-                    InviteStatus = InviteStatus.Attending,
-                }
-            };
+        private readonly IInviteRepository repository;
 
+        public InviteController(IInviteRepository repository)
+        {
+            this.repository = repository;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Invite>>> GetInviteListAsync()
+        {
+            var list = await repository.GetInvitesAsync();
             return Ok(list);
         }
 
         [HttpPost]
-        public ActionResult<Invite> CreateInvite([FromBody] Invite body)
+        public async Task<ActionResult<Invite>> CreateInviteAsync([FromBody] CreateInviteRequest request)
         {
-            Invite invite = new()
-            {
-                Name = body.Name,
-                Email = body.Email,
-            };
-
+            Invite invite = await repository.CreateInviteAsync(request.Name, request.Email);
             return Ok(invite);
         }
 
         [HttpDelete]
         [Route("{id}")]
-        public ActionResult DeleteInvite(int id)
+        public async Task<ActionResult> DeleteInviteAsync(int id)
         {
-            return NoContent();
+            bool success = await repository.DeleteInviteAsync(id);
+            return success ? 
+                NoContent() : 
+                NotFound($"Invite with ID: {id} was not found.");
         }
     }
 }

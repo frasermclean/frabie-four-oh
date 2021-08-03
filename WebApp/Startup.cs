@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using WebApp.Services;
 
 namespace FrabieFourOh.WebApp
 {
@@ -18,7 +19,9 @@ namespace FrabieFourOh.WebApp
         
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
+            // add application services
+            services.AddSingleton<IInviteRepository, InviteRepository>();
+            
             services.AddControllers();
             services.AddSpaStaticFiles(configuration =>
             {
