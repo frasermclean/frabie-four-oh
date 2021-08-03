@@ -1,6 +1,30 @@
-<ng-container *ngIf="invites$ | async as invites">
-  <p *ngFor="let invite of invites">
-    {{ invite.name }}
-  </p>
-</ng-container>
+<div class="container">
+  <ng-container *ngIf="invites$ | async as invites">
+    <table mat-table [dataSource]="invites" *ngIf="invites.length > 0; else noInvites">
+      <!-- name column -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Name</th>
+        <td mat-cell *matCellDef="let invite">{{ invite.name }}</td>
+      </ng-container>
 
+      <!-- email column -->
+      <ng-container matColumnDef="email">
+        <th mat-header-cell *matHeaderCellDef>Email Address</th>
+        <td mat-cell *matCellDef="let invite">{{ invite.email }}</td>
+      </ng-container>
+
+      <!-- invite status column -->
+      <ng-container matColumnDef="inviteStatus">
+        <th mat-header-cell *matHeaderCellDef>Invite Status</th>
+        <td mat-cell *matCellDef="let invite">{{ invite.inviteStatus }}</td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+    <ng-template #noInvites>
+      <h2>No Invitations</h2>
+      <p>No invitations have been sent out yet.</p>
+    </ng-template>
+  </ng-container>
+</div>

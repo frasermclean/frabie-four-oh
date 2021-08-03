@@ -10,6 +10,7 @@ import { InviteService } from 'src/app/services/invite.service';
 })
 export class InviteListComponent implements OnInit {
   invites$: Observable<Invite[]>;
+  displayedColumns: string[] = ['name', 'email', 'inviteStatus'];
 
   constructor(private inviteService: InviteService) {
     this.invites$ = this.inviteService.getInvites();
