@@ -31,12 +31,10 @@ namespace WebApp.Controllers
 
         [HttpDelete]
         [Route("{id}")]
-        public async Task<ActionResult> DeleteInviteAsync(int id)
+        public async Task<ActionResult> DeleteInviteAsync(string id)
         {
-            bool success = await repository.DeleteInviteAsync(id);
-            return success ? 
-                NoContent() : 
-                NotFound($"Invite with ID: {id} was not found.");
+            await repository.DeleteInviteAsync(id);
+            return NoContent();
         }
     }
 }

@@ -28,7 +28,6 @@ namespace WebApp.Services
             // define client options
             CosmosClientOptions options = new()
             {
-                EnableContentResponseOnWrite = false,
                 SerializerOptions = new CosmosSerializationOptions()
                 {
                     PropertyNamingPolicy = CosmosPropertyNamingPolicy.CamelCase

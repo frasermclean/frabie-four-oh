@@ -10,7 +10,7 @@ namespace WebApp.Services
     {
         Task<IEnumerable<Invite>> GetInvitesAsync();
         Task<Invite> CreateInviteAsync(string name, string email);
-        Task<bool> DeleteInviteAsync(int id);
+        Task DeleteInviteAsync(string id);
     }
 
     public class InviteRepository : IInviteRepository
@@ -48,9 +48,10 @@ namespace WebApp.Services
             });
         }
 
-        public Task<bool> DeleteInviteAsync(int id)
+        public async Task DeleteInviteAsync(string id)
         {
-            return Task.FromResult(false);
+            Container container = await GetContainerAsync();
+            await container.DeleteItemAsync<Invite>(id, PartitionKey.Null);
         }
 
 
