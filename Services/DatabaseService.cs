@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 
-namespace WebApp.Services
+namespace FrabieFourOh.Services
 {
     public interface IDatabaseService
     {

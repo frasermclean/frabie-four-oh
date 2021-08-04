@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace WebApp.Controllers
+namespace FrabieFourOh.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]

@@ -1,4 +1,4 @@
-﻿namespace WebApp.Models
+﻿namespace FrabieFourOh.Models
 {
     public class InviteDto
     {

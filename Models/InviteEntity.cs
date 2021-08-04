@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WebApp.Models
+namespace FrabieFourOh.Models
 {
     public class InviteEntity : Entity
     {

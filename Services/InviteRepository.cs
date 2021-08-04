@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using WebApp.Models;
+using FrabieFourOh.Models;
 
-namespace WebApp.Services
+namespace FrabieFourOh.Services
 {
     public interface IInviteRepository
     {

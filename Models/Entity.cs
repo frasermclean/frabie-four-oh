@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 
-namespace WebApp.Models
+namespace FrabieFourOh.Models
 {
     public abstract class Entity
     {

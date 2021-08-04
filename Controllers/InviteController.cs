@@ -2,10 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using WebApp.Models;
-using WebApp.Services;
+using FrabieFourOh.Models;
+using FrabieFourOh.Services;
 
-namespace WebApp.Controllers
+namespace FrabieFourOh.Controllers
 {
     public class InviteController : WebApiController
     {
