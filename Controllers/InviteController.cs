@@ -1,9 +1,10 @@
 ﻿using AutoMapper;
+using FrabieFourOh.Models;
+using FrabieFourOh.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using FrabieFourOh.Models;
-using FrabieFourOh.Services;
 
 namespace FrabieFourOh.Controllers
 {
@@ -11,11 +12,13 @@ namespace FrabieFourOh.Controllers
     {
         private readonly IInviteRepository repository;
         private readonly IMapper mapper;
+        private readonly IEmailService emailService;
 
-        public InviteController(IInviteRepository repository, IMapper mapper)
+        public InviteController(IInviteRepository repository, IMapper mapper, IEmailService emailService)
         {
             this.repository = repository;
             this.mapper = mapper;
+            this.emailService = emailService;
         }
 
         [HttpGet]
@@ -29,7 +32,15 @@ namespace FrabieFourOh.Controllers
         public async Task<ActionResult<InviteEntity>> CreateInviteAsync([FromBody] CreateInviteRequest request)
         {
             InviteEntity invite = await repository.CreateInviteAsync(request.Name, request.Email);
-            return Ok(mapper.Map<InviteDto>(invite));
+            bool success = await emailService.SendInvitationAsync(invite.Name, invite.Email, invite.VerificationCode);
+
+            if (success)
+                return Ok(mapper.Map<InviteDto>(invite));
+            else
+            {
+                await repository.DeleteInviteAsync(invite.Id);
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error sending email.");
+            }
         }
 
         [HttpDelete]
