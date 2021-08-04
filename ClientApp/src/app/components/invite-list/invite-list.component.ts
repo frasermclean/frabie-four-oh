@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { Observable } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { CreateInvite } from 'src/app/models/create-invite';
-import { Invite } from 'src/app/models/invite';
+import { Invite, InviteStatus } from 'src/app/models/invite';
 import { InviteService } from 'src/app/services/invite.service';
 
 @Component({
@@ -10,8 +10,9 @@ import { InviteService } from 'src/app/services/invite.service';
   templateUrl: './invite-list.component.html',
   styleUrls: ['./invite-list.component.scss'],
 })
-export class InviteListComponent implements OnInit {
+export class InviteListComponent implements OnInit, OnDestroy {
   dataSource = new MatTableDataSource<Invite>();
+  private subscription: Subscription;
   displayedColumns: string[] = [
     'name',
     'email',
@@ -19,13 +20,18 @@ export class InviteListComponent implements OnInit {
     'deleteInvite',
   ];
 
-  constructor(private inviteService: InviteService) {}
-
-  ngOnInit(): void {
-    this.inviteService.data$.subscribe((invites) => {
+  constructor(private inviteService: InviteService) {
+    this.subscription = this.inviteService.data$.subscribe((invites) => {
       this.dataSource.data = invites;
     });
+  }
+
+  ngOnInit(): void {
     this.inviteService.getInvites();
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
   onInviteData(data: CreateInvite) {
@@ -34,5 +40,18 @@ export class InviteListComponent implements OnInit {
 
   onDelete(invite: Invite) {
     this.inviteService.deleteInvite(invite.id);
+  }
+
+  getInviteStatus(invite: Invite) {
+    switch (invite.inviteStatus) {
+      case InviteStatus.Attending:
+        return 'Attending';
+      case InviteStatus.AwaitingResponse:
+        return 'Awaiting Response';
+      case InviteStatus.NotAttending:
+        return 'Not Attending';
+      default:
+        return 'Unknown';
+    }
   }
 }
