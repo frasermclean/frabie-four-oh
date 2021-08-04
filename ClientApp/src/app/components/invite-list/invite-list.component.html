@@ -1,32 +1,46 @@
 <div class="container">
-  <ng-container *ngIf="invites$ | async as invites; else spinner">
-    <table mat-table [dataSource]="invites" *ngIf="invites.length > 0; else noInvites">
-      <!-- name column -->
-      <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef>Name</th>
-        <td mat-cell *matCellDef="let invite">{{ invite.name }}</td>
-      </ng-container>
+  <!-- <ng-container *ngIf="invites$ | async as invites; else spinner"> -->
+    <app-invite-create (inviteData)="onInviteData($event)"></app-invite-create>
+    <div class="table-spacer">
+      <table mat-table [dataSource]="dataSource">
+        <!-- name column -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>Name</th>
+          <td mat-cell *matCellDef="let invite">{{ invite.name }}</td>
+        </ng-container>
 
-      <!-- email column -->
-      <ng-container matColumnDef="email">
-        <th mat-header-cell *matHeaderCellDef>Email Address</th>
-        <td mat-cell *matCellDef="let invite">{{ invite.email }}</td>
-      </ng-container>
+        <!-- email column -->
+        <ng-container matColumnDef="email">
+          <th mat-header-cell *matHeaderCellDef>Email Address</th>
+          <td mat-cell *matCellDef="let invite">{{ invite.email }}</td>
+        </ng-container>
 
-      <!-- invite status column -->
-      <ng-container matColumnDef="inviteStatus">
-        <th mat-header-cell *matHeaderCellDef>Invite Status</th>
-        <td mat-cell *matCellDef="let invite">{{ invite.inviteStatus }}</td>
-      </ng-container>
+        <!-- invite status column -->
+        <ng-container matColumnDef="inviteStatus">
+          <th mat-header-cell *matHeaderCellDef>Invite Status</th>
+          <td mat-cell *matCellDef="let invite">{{ invite.inviteStatus }}</td>
+        </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-    </table>
-    <ng-template #noInvites>
-      <h2>No Invitations</h2>
-      <p>No invitations have been sent out yet.</p>
-    </ng-template>
-  </ng-container>
+        <!-- delete column -->
+        <ng-container matColumnDef="deleteInvite">
+          <th mat-header-cell *matHeaderCellDef>Delete</th>
+          <td mat-cell *matCellDef="let invite">
+            <button mat-icon-button (click)="onDelete(invite)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+      <ng-template #noInvites>
+        <h2>No Invitations</h2>
+        <p>No invitations have been sent out yet.</p>
+      </ng-template>
+    </div>
+
+  <!-- </ng-container> -->
   <ng-template #spinner>
     <div class="spinner-container">
       <mat-spinner></mat-spinner>
